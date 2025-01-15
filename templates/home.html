@@ -7,104 +7,120 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            font-family: 'Roboto', sans-serif;
+            background-color: #eef2f7;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         .container {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         h2 {
             text-align: center;
-            color: #333;
+            color: #34495e;
+            margin-bottom: 20px;
         }
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 8px;
         }
         input[type="number"] {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             box-sizing: border-box;
         }
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
+            padding: 12px;
+            background-color: #3498db;
+            color: #ffffff;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #2980b9;
         }
         .result {
             margin-top: 20px;
-            font-size: 1.1em;
-            color: #333;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
         }
         .result p {
-            margin: 5px 0;
+            margin: 0;
+            font-size: 1.1rem;
+            color: #333;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Calculateur de Prêt</h2>
-        <div class="input-group">
-            <label for="loan_amount">Montant du prêt (€)</label>
-            <input type="number" id="loan_amount" name="loan_amount" placeholder="Exemple : 10000" required>
-        </div>
-        <div class="input-group">
-            <label for="duration">Durée (années)</label>
-            <input type="number" id="duration" name="duration" placeholder="Exemple : 5" required>
-        </div>
-        <div class="input-group">
-            <label for="interest_rate">Taux d'intérêt (%)</label>
-            <input type="number" id="interest_rate" name="interest_rate" step="0.01" placeholder="Exemple : 3.5" required>
-        </div>
-        <button onclick="calculateLoan()">Calculer</button>
+        <form id="loan-form">
+            <div class="input-group">
+                <label for="loan_amount">Montant du prêt (€)</label>
+                <input type="number" id="loan_amount" name="loan_amount" placeholder="Exemple : 10000" required>
+            </div>
+            <div class="input-group">
+                <label for="duration">Durée (années)</label>
+                <input type="number" id="duration" name="duration" placeholder="Exemple : 5" required>
+            </div>
+            <div class="input-group">
+                <label for="interest_rate">Taux d'intérêt (%)</label>
+                <input type="number" id="interest_rate" name="interest_rate" step="0.01" placeholder="Exemple : 3.5" required>
+            </div>
+            <button type="button" onclick="calculateLoan()">Calculer</button>
+        </form>
 
-        <div class="result">
-            <p>Mensualité : €<span id="monthly_payment">0.00</span></p>
-            <p>Coût total du prêt : €<span id="total_cost">0.00</span></p>
+        <div class="result" id="results" style="display: none;">
+            <p>Mensualité : <strong>€<span id="monthly_payment">0.00</span></strong></p>
+            <p>Coût total du prêt : <strong>€<span id="total_cost">0.00</span></strong></p>
         </div>
     </div>
 
     <script>
         function calculateLoan() {
-            const loan_amount = parseFloat(document.getElementById('loan_amount').value);
+            const loanAmount = parseFloat(document.getElementById('loan_amount').value);
             const duration = parseInt(document.getElementById('duration').value);
-            const interest_rate = parseFloat(document.getElementById('interest_rate').value);
+            const interestRate = parseFloat(document.getElementById('interest_rate').value);
 
-            if (isNaN(loan_amount) || isNaN(duration) || isNaN(interest_rate)) {
+            if (isNaN(loanAmount) || isNaN(duration) || isNaN(interestRate)) {
                 alert("Veuillez remplir tous les champs avec des valeurs valides.");
                 return;
             }
 
-            const monthly_rate = interest_rate / 100 / 12;
-            const number_of_payments = duration * 12;
+            const monthlyRate = interestRate / 100 / 12;
+            const numberOfPayments = duration * 12;
 
-            const monthly_payment = (loan_amount * monthly_rate) / (1 - Math.pow(1 + monthly_rate, -number_of_payments));
-            const total_cost = monthly_payment * number_of_payments;
+            const monthlyPayment = (loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numberOfPayments));
+            const totalCost = monthlyPayment * numberOfPayments;
 
-            document.getElementById('monthly_payment').textContent = monthly_payment.toFixed(2);
-            document.getElementById('total_cost').textContent = total_cost.toFixed(2);
+            document.getElementById('monthly_payment').textContent = monthlyPayment.toFixed(2);
+            document.getElementById('total_cost').textContent = totalCost.toFixed(2);
+
+            document.getElementById('results').style.display = 'block';
         }
     </script>
 </body>
