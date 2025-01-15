@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculateur de Prêt</title>
+    <title>Calculateur d'IMC</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
@@ -77,48 +77,50 @@
 </head>
 <body>
     <div class="container">
-        <h2>Calculateur de Prêt</h2>
-        <form id="loan-form">
+        <h2>Calculateur d'IMC</h2>
+        <form id="bmi-form">
             <div class="input-group">
-                <label for="loan_amount">Montant du prêt (€)</label>
-                <input type="number" id="loan_amount" name="loan_amount" placeholder="Exemple : 10000" required>
+                <label for="weight">Poids (kg)</label>
+                <input type="number" id="weight" name="weight" placeholder="Exemple : 70" required>
             </div>
             <div class="input-group">
-                <label for="duration">Durée (années)</label>
-                <input type="number" id="duration" name="duration" placeholder="Exemple : 5" required>
+                <label for="height">Taille (cm)</label>
+                <input type="number" id="height" name="height" placeholder="Exemple : 175" required>
             </div>
-            <div class="input-group">
-                <label for="interest_rate">Taux d'intérêt (%)</label>
-                <input type="number" id="interest_rate" name="interest_rate" step="0.01" placeholder="Exemple : 3.5" required>
-            </div>
-            <button type="button" onclick="calculateLoan()">Calculer</button>
+            <button type="button" onclick="calculateBMI()">Calculer</button>
         </form>
 
         <div class="result" id="results" style="display: none;">
-            <p>Mensualité : <strong>€<span id="monthly_payment">0.00</span></strong></p>
-            <p>Coût total du prêt : <strong>€<span id="total_cost">0.00</span></strong></p>
+            <p>Votre IMC : <strong><span id="bmi">0.00</span></strong></p>
+            <p>Interprétation : <strong><span id="bmi_category">-</span></strong></p>
         </div>
     </div>
 
     <script>
-        function calculateLoan() {
-            const loanAmount = parseFloat(document.getElementById('loan_amount').value);
-            const duration = parseInt(document.getElementById('duration').value);
-            const interestRate = parseFloat(document.getElementById('interest_rate').value);
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value) / 100; // Convert cm to meters
 
-            if (isNaN(loanAmount) || isNaN(duration) || isNaN(interestRate)) {
-                alert("Veuillez remplir tous les champs avec des valeurs valides.");
+            if (isNaN(weight) || isNaN(height) || height <= 0) {
+                alert("Veuillez entrer des valeurs valides pour le poids et la taille.");
                 return;
             }
 
-            const monthlyRate = interestRate / 100 / 12;
-            const numberOfPayments = duration * 12;
+            const bmi = weight / (height * height);
+            let category = "";
 
-            const monthlyPayment = (loanAmount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -numberOfPayments));
-            const totalCost = monthlyPayment * numberOfPayments;
+            if (bmi < 18.5) {
+                category = "Insuffisance pondérale";
+            } else if (bmi < 25) {
+                category = "Poids normal";
+            } else if (bmi < 30) {
+                category = "Surpoids";
+            } else {
+                category = "Obésité";
+            }
 
-            document.getElementById('monthly_payment').textContent = monthlyPayment.toFixed(2);
-            document.getElementById('total_cost').textContent = totalCost.toFixed(2);
+            document.getElementById('bmi').textContent = bmi.toFixed(2);
+            document.getElementById('bmi_category').textContent = category;
 
             document.getElementById('results').style.display = 'block';
         }
