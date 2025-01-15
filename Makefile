@@ -1,8 +1,13 @@
 init:
-	pip install -r requirements.txt
-
+	python3 -m venv venv
+	. venv/bin/activate && pip install -r requirements.txt
+ 
 run:
-	python app.py
-
+	python3 -m venv venv
+	. venv/bin/activate && pip install -r requirements.txt
+	. venv/bin/activate && python app.py
+ 
 test:
-	python -m unittest test.py
+	python3 -m venv venv
+	. venv/bin/activate && pip install -r requirements.txt
+	. venv/bin/activate && python -m unittest \ test.py
