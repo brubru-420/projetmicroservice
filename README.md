@@ -78,11 +78,4 @@ DEVOPS-PROJECT/
 For deployment, configure CI/CD pipelines according to your preferred platform (e.g., GitHub Actions, Azure Pipelines). This template can be used with cloud deployment platforms like AWS, Azure, or Heroku for easy scalability.
   - Use `pipeline.yaml` as a template for a pipeline to build and deploy an application on Azure
 
-## Author
-
-This template was created by **Ali Mokh** and is intended as an educational resource for DevOps projects involving Flask applications.
-
-## License and Usage
-
-This project template is open to use by anyone and may be freely adapted for personal or professional projects. If you use this template as part of teaching materials or educational content, please cite **Ali Mokh** as the original author.
 
